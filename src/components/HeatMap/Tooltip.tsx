@@ -1,19 +1,25 @@
 import { InteractionData } from "./Heatmap";
 import styles from "./styles.css";
+import { Tooltip as AntdTooltip } from "antd";
 
 type TooltipProps = {
   interactionData: InteractionData | null;
   width: number;
   height: number;
+  tooltipMessage?: (x: string, y: string, value: number) => string;
 };
 
 export default function Tooltip({
   interactionData,
   width,
   height,
+  tooltipMessage = null,
 }: TooltipProps) {
   if (!interactionData) {
-    interactionData = { xPos: 0, yPos: 0, yLabel: 'Y test', xLabel: 'X test', value: 100}
+    return;
+  }
+  if (!tooltipMessage) {
+    return;
   }
 
   return (
@@ -28,22 +34,26 @@ export default function Tooltip({
         pointerEvents: "none",
       }}
     >
-      {/* The actual box with white background */}
-      <div
-        style={{
-          position: "absolute",
-          left: interactionData.xPos,
-          top: interactionData.yPos,
-          backgroundColor: 'red'
-        }}
-        className=".tooltip"
+      <AntdTooltip
+        open={interactionData !== null}
+        placement="bottom"
+        title={tooltipMessage(
+          interactionData?.xLabel,
+          interactionData?.yLabel,
+          interactionData?.value || 0
+        )}
       >
-        <span>{interactionData.yLabel}</span>
-        <br />
-        <span>{interactionData.xLabel}</span>
-        <span>: </span>
-        <b>{interactionData.value || 0}</b>
-      </div>
+        {/* The actual box with white background */}
+        <div
+          style={{
+            position: "absolute",
+            left: interactionData?.xPos,
+            top: interactionData?.yPos,
+            backgroundColor: "red",
+          }}
+          // className=".tooltip"
+        />
+      </AntdTooltip>
     </div>
   );
 }

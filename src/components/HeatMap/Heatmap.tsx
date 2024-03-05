@@ -13,6 +13,7 @@ type HeatmapProps = {
   cellHeight?: number;
   data: { x: number; y: string; value: number | null }[];
   showLegend?: boolean;
+  tooltipMessge?: (x: string, y: string, value: number) => string
 };
 
 export type InteractionData = {
@@ -30,6 +31,7 @@ export const Heatmap = ({
   cellHeight = 10,
   data,
   showLegend = false,
+  tooltipMessge = null,
 }: HeatmapProps) => {
   const [hoveredCell, setHoveredCell] = useState<InteractionData | null>(null);
 
@@ -59,6 +61,7 @@ export const Heatmap = ({
         interactionData={hoveredCell}
         width={width}
         height={height - COLOR_LEGEND_HEIGHT}
+        tooltipMessage={tooltipMessge}
       />
       {showLegend && (
         <div

@@ -171,7 +171,14 @@ export default function Home() {
           />
         </div>
       </div>
-      <HeatMap data={group_dist} cellHeight={25} cellWidth={50}/>
+      <HeatMap
+        data={group_dist}
+        cellHeight={25}
+        cellWidth={50}
+        tooltipMessge={(x: string, y: string, value: number) =>
+          `(${x}, ${y}): ${value} members`
+        }
+      />
     </div>
   );
 }
