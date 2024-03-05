@@ -38,7 +38,7 @@ export default function TeamCard({
   return (
     <div ref={drop}>
       <Card
-        title={`Team #${id + 1}`}
+        title={`Team #${id + 1} (${participants.length} members)`}
         extra={
           <div className="pointer danger" onClick={onDelete}>
             <DeleteOutlined />
