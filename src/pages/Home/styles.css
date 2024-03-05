@@ -11,3 +11,8 @@
 .app-container .team-list {
   flex: 1;
 }
+
+.statistics-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

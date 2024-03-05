@@ -1,14 +1,16 @@
 import "./styles.css";
 import { useState } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { Button, List } from "antd";
+import { Button, List, Typography } from "antd";
 import { CoffeeOutlined, DownloadOutlined } from "@ant-design/icons";
 import type { Person } from "@types";
 import ParticipantList from "@components/ParticipantList";
 import TeamCard from "@components/TeamCard";
 import FileLoader from "@components/FileLoader";
 import { unparseCsvContent } from "@utils/csv";
-import HeatMap from "@components/HeatMap";
+import Statistics from "@components/Statistics";
+
+const { Title } = Typography;
 
 function get_feature_distribution(
   participants: Person[],
@@ -33,8 +35,8 @@ function get_feature_distribution(
   for (let team = 0; team < nTeams; team++) {
     for (const value of values) {
       result.push({
-        x: `Team ${team + 1}`,
-        y: value,
+        y: `Team ${team + 1}`,
+        x: value,
         value: data.get(JSON.stringify([value, team])) || 0,
       });
     }
@@ -60,8 +62,22 @@ export default function Home() {
       features.add(feature);
     }
   });
-  console.log(features);
+  // console.log(features);
 
+  const statistics = [
+    {
+      title: "Distribuição de elementos por agrupamento",
+      dist: get_feature_distribution(participants, nTeams, "group"),
+    },
+    {
+      title: "Distribuição de elementos por género",
+      dist: get_feature_distribution(participants, nTeams, "sex"),
+    },
+    {
+      title: 'Distribuição de elementos por "força"',
+      dist: get_feature_distribution(participants, nTeams, "strength"),
+    },
+  ];
   const group_dist = get_feature_distribution(participants, nTeams, "group");
   console.log("GROUP DIST: ", group_dist);
 
@@ -171,14 +187,10 @@ export default function Home() {
           />
         </div>
       </div>
-      <HeatMap
-        data={group_dist}
-        cellHeight={25}
-        cellWidth={50}
-        tooltipMessge={(x: string, y: string, value: number) =>
-          `(${x}, ${y}): ${value} members`
-        }
-      />
+      <div className="statistics-section">
+        <Title level={2}>Statistics</Title>
+        <Statistics statistics={statistics} />
+      </div>
     </div>
   );
 }

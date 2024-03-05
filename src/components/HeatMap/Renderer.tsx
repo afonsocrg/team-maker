@@ -87,12 +87,13 @@ export default function Renderer({
   });
 
   const xLabels = allXGroups.map((name, i) => {
-    if (name && Number(name) % 10 === 0) {
+    if (true || name && Number(name) % 10 === 0) {
       return (
         <text
           key={i}
-          x={xScale(name)}
-          y={boundsHeight + 10}
+          x={xScale(name) + 25}
+          // y={boundsHeight + 10}
+          y={0-5}
           textAnchor="middle"
           dominantBaseline="middle"
           fontSize={10}
@@ -107,7 +108,7 @@ export default function Renderer({
 
   const yLabels = allYGroups.map((name, i) => {
     const yPos = yScale(name);
-    if (yPos && i % 2 === 0) {
+    if (true || yPos && i % 2 === 0) {
       return (
         <text
           key={i}
