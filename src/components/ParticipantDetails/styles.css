@@ -1,0 +1,9 @@
+.details-container {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.details-container .details {
+  max-width: 300px;
+}

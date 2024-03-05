@@ -1,0 +1,38 @@
+.layout {
+  border-radius: 8;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  padding: 48px;
+}
+
+.footer {
+  text-align: center;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.footer .github-logo svg {
+  color: #555555;
+  font-size: 24pt;
+}
+
+.footer .privacy-policy {
+  color: #555555 !important;
+}

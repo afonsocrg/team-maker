@@ -1,0 +1,13 @@
+.app-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.app-container .participant-list {
+  min-width: 200px;
+}
+
+.app-container .team-list {
+  flex: 1;
+}
