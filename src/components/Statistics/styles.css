@@ -5,6 +5,17 @@
   justify-content: center;
 }
 
+.statistic-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heatmap-container {
+  max-width: 100%; /* Ensure heatmap container does not exceed its parent's width */
+}
+
 .subtitle {
-  overflow: wrap;
+  color: #888888;
+  text-align: center;
 }

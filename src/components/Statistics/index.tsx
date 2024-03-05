@@ -6,19 +6,22 @@ const { Text } = Typography;
 export default function Statistics({ statistics }) {
   return (
     <div className="statistics-container">
-      {statistics.map((statistic) => {
+      {statistics.map((statistic, idx) => {
         return (
-          <div key={statistic.title}>
-            <HeatMap
-              data={statistic.dist}
-              cellHeight={25}
-              cellWidth={50}
-              tooltipMessge={(x: string, y: string, value: number) =>
-                `(${x}, ${y}): ${value} members`
-              }
-            />
-            <div className='subtitle'>
-              <Text type="secondary">{statistic.title}</Text>
+          <div key={statistic.title} className="statistic-item">
+            <div className="subtitle">
+              <p>{statistic.title}</p>
+            </div>
+            <div className="heatmap-container">
+              <HeatMap
+                data={statistic.dist}
+                cellHeight={25}
+                cellWidth={50}
+                tooltipMessge={(x: string, y: string, value: number) =>
+                  `(${x}, ${y}): ${value} members`
+                }
+                yLabel={idx === 0}
+              />
             </div>
           </div>
         );

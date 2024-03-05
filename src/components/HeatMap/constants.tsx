@@ -1,4 +1,4 @@
-export const MARGIN = { top: 10, right: 10, bottom: 50, left: 50 };
+export const MARGIN = { top: 2, right: 2, bottom: 2, left: 2 };
 
 export const COLOR_LEGEND_HEIGHT = 60;
 

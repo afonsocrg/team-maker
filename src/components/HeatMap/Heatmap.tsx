@@ -7,13 +7,15 @@ import * as d3 from "d3";
 import { COLORS, THRESHOLDS } from "./constants";
 
 type HeatmapProps = {
+  data: { x: number; y: string; value: number | null }[];
   width?: number;
   cellWidth?: number;
   height?: number;
   cellHeight?: number;
-  data: { x: number; y: string; value: number | null }[];
+  xLabel?: boolean;
+  yLabel?: boolean;
   showLegend?: boolean;
-  tooltipMessge?: (x: string, y: string, value: number) => string
+  tooltipMessge?: (x: string, y: string, value: number) => string;
 };
 
 export type InteractionData = {
@@ -31,6 +33,8 @@ export const Heatmap = ({
   cellHeight = 10,
   data,
   showLegend = false,
+  xLabel = true,
+  yLabel = false,
   tooltipMessge = null,
 }: HeatmapProps) => {
   const [hoveredCell, setHoveredCell] = useState<InteractionData | null>(null);
@@ -52,6 +56,8 @@ export const Heatmap = ({
         width={width}
         cellWidth={cellWidth}
         height={height}
+        xLabel={xLabel}
+        yLabel={yLabel}
         cellHeight={cellHeight}
         data={data}
         setHoveredCell={setHoveredCell}

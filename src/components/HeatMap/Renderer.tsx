@@ -6,13 +6,15 @@ import { Dataset } from "./data";
 import styles from "./styles.css";
 
 type RendererProps = {
+  data: Dataset;
+  setHoveredCell: (hoveredCell: InteractionData | null) => void;
+  colorScale: d3.ScaleLinear<string, string, never>;
+  xLabel: boolean;
+  yLabel: boolean;
   width?: number;
   cellWidth?: number;
   height?: number;
   cellHeight?: number;
-  data: Dataset;
-  setHoveredCell: (hoveredCell: InteractionData | null) => void;
-  colorScale: d3.ScaleLinear<string, string, never>;
 };
 
 export default function Renderer({
@@ -23,23 +25,38 @@ export default function Renderer({
   data,
   setHoveredCell,
   colorScale,
+  xLabel,
+  yLabel,
 }: RendererProps) {
   const allYGroups = useMemo(() => [...new Set(data.map((d) => d.y))], [data]);
   const allXGroups = useMemo(
-    () => [...new Set(data.map((d) => String(d.x)))],
+    () => [...new Set(data.map((d) => String(d.x)))].sort(),
     [data]
   );
 
+  const xLabelHeight = xLabel ? 10 : 0;
+  const yLabelWidth = yLabel ? 50 : 0;
+
   if (cellWidth !== undefined) {
-    width = cellWidth * allXGroups.length + MARGIN.right + MARGIN.left;
+    width =
+      cellWidth * allXGroups.length + MARGIN.right + MARGIN.left + yLabelWidth;
   }
   if (cellHeight !== undefined) {
-    height = cellHeight * allYGroups.length + MARGIN.top + MARGIN.bottom;
+    height =
+      cellHeight * allYGroups.length +
+      MARGIN.top +
+      MARGIN.bottom +
+      xLabelHeight;
   }
 
   // bounds = area inside the axis
-  const boundsWidth = width - MARGIN.right - MARGIN.left;
-  const boundsHeight = height - MARGIN.top - MARGIN.bottom;
+  const boundsWidth = width - MARGIN.right - MARGIN.left - yLabelWidth;
+  const boundsHeight = height - MARGIN.top - MARGIN.bottom - xLabelHeight;
+  const boundStartX = MARGIN.left + yLabelWidth
+  const boundStartY = MARGIN.top + xLabelHeight
+
+  console.log("X:", width, boundsWidth, yLabelWidth);
+  console.log("Y:", height, boundsHeight, xLabelHeight);
 
   const xScale = useMemo(() => {
     return d3
@@ -87,13 +104,13 @@ export default function Renderer({
   });
 
   const xLabels = allXGroups.map((name, i) => {
-    if (true || name && Number(name) % 10 === 0) {
+    if (xLabel) {
       return (
         <text
           key={i}
           x={xScale(name) + 25}
           // y={boundsHeight + 10}
-          y={0-5}
+          y={0 - 5}
           textAnchor="middle"
           dominantBaseline="middle"
           fontSize={10}
@@ -103,12 +120,12 @@ export default function Renderer({
           {name}
         </text>
       );
-    }
+    } else return null;
   });
 
   const yLabels = allYGroups.map((name, i) => {
     const yPos = yScale(name);
-    if (true || yPos && i % 2 === 0) {
+    if (yLabel) {
       return (
         <text
           key={i}
@@ -121,6 +138,8 @@ export default function Renderer({
           {name}
         </text>
       );
+    } else {
+      return null;
     }
   });
 
@@ -133,7 +152,7 @@ export default function Renderer({
       <g
         width={boundsWidth}
         height={boundsHeight}
-        transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+        transform={`translate(${[boundStartX, boundStartY].join(",")})`}
       >
         {allRects}
         {xLabels}

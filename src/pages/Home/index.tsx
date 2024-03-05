@@ -45,6 +45,18 @@ function get_feature_distribution(
   return result;
 }
 
+function get_size_distribution(participants: Person[], nTeams: number) {
+  const result = [];
+  for (let team = 0; team < nTeams; team++) {
+    result.push({
+      y: `Team ${team + 1}`,
+      x: "Size",
+      value: participants.filter((p) => p.team === team).length,
+    });
+  }
+  return result;
+}
+
 export default function Home() {
   const [participants, setParticipants] = useLocalStorage<Person[]>(
     "participants",
@@ -66,20 +78,22 @@ export default function Home() {
 
   const statistics = [
     {
-      title: "Distribuição de elementos por agrupamento",
+      title: "Tamanho",
+      dist: get_size_distribution(participants, nTeams),
+    },
+    {
+      title: "Agrupamento",
       dist: get_feature_distribution(participants, nTeams, "group"),
     },
     {
-      title: "Distribuição de elementos por género",
+      title: "Género",
       dist: get_feature_distribution(participants, nTeams, "sex"),
     },
     {
-      title: 'Distribuição de elementos por "força"',
+      title: '"Força"',
       dist: get_feature_distribution(participants, nTeams, "strength"),
     },
   ];
-  const group_dist = get_feature_distribution(participants, nTeams, "group");
-  console.log("GROUP DIST: ", group_dist);
 
   const unassignedParticipants = participants.filter(
     (p) => p.team === null || p.team === undefined
@@ -145,6 +159,12 @@ export default function Home() {
 
   return (
     <div>
+      {nTeams > 0 && (
+        <div className="statistics-section">
+          {/* <Title level={2}>Statistics</Title> */}
+          <Statistics statistics={statistics} />
+        </div>
+      )}
       <FileLoader onLoad={loadParticipants} />
       <Button icon={<CoffeeOutlined />}>Generate teams</Button>
       <Button icon={<DownloadOutlined />} onClick={handleExportCsv}>
@@ -186,10 +206,6 @@ export default function Home() {
             }}
           />
         </div>
-      </div>
-      <div className="statistics-section">
-        <Title level={2}>Statistics</Title>
-        <Statistics statistics={statistics} />
       </div>
     </div>
   );
