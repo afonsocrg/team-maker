@@ -6,8 +6,10 @@ import { Dataset } from "./data";
 import styles from "./styles.css";
 
 type RendererProps = {
-  width: number;
-  height: number;
+  width?: number;
+  cellWidth?: number;
+  height?: number;
+  cellHeight?: number;
   data: Dataset;
   setHoveredCell: (hoveredCell: InteractionData | null) => void;
   colorScale: d3.ScaleLinear<string, string, never>;
@@ -15,20 +17,29 @@ type RendererProps = {
 
 export default function Renderer({
   width,
+  cellWidth = 50,
   height,
+  cellHeight = 50,
   data,
   setHoveredCell,
   colorScale,
 }: RendererProps) {
-  // bounds = area inside the axis
-  const boundsWidth = width - MARGIN.right - MARGIN.left;
-  const boundsHeight = height - MARGIN.top - MARGIN.bottom;
-
   const allYGroups = useMemo(() => [...new Set(data.map((d) => d.y))], [data]);
   const allXGroups = useMemo(
     () => [...new Set(data.map((d) => String(d.x)))],
     [data]
   );
+
+  if (cellWidth !== undefined) {
+    width = cellWidth * allXGroups.length + MARGIN.right + MARGIN.left;
+  }
+  if (cellHeight !== undefined) {
+    height = cellHeight * allYGroups.length + MARGIN.top + MARGIN.bottom;
+  }
+
+  // bounds = area inside the axis
+  const boundsWidth = width - MARGIN.right - MARGIN.left;
+  const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
   const xScale = useMemo(() => {
     return d3
@@ -49,7 +60,6 @@ export default function Renderer({
   const allRects = data.map((d, i) => {
     const xPos = xScale(String(d.x));
     const yPos = yScale(d.y);
-
     if (d.value === null || !xPos || !yPos) {
       return;
     }

@@ -7,9 +7,12 @@ import * as d3 from "d3";
 import { COLORS, THRESHOLDS } from "./constants";
 
 type HeatmapProps = {
-  width: number;
-  height: number;
+  width?: number;
+  cellWidth?: number;
+  height?: number;
+  cellHeight?: number;
   data: { x: number; y: string; value: number | null }[];
+  showLegend?: boolean;
 };
 
 export type InteractionData = {
@@ -20,7 +23,14 @@ export type InteractionData = {
   value: number | null;
 };
 
-export const Heatmap = ({ width, height, data }: HeatmapProps) => {
+export const Heatmap = ({
+  width,
+  cellWidth = 10,
+  height,
+  cellHeight = 10,
+  data,
+  showLegend = false,
+}: HeatmapProps) => {
   const [hoveredCell, setHoveredCell] = useState<InteractionData | null>(null);
 
   // Color scale is computed here bc it must be passed to both the renderer and the legend
@@ -38,7 +48,9 @@ export const Heatmap = ({ width, height, data }: HeatmapProps) => {
     <div style={{ position: "relative" }}>
       <Renderer
         width={width}
-        height={height - COLOR_LEGEND_HEIGHT}
+        cellWidth={cellWidth}
+        height={height}
+        cellHeight={cellHeight}
         data={data}
         setHoveredCell={setHoveredCell}
         colorScale={colorScale}
@@ -48,14 +60,18 @@ export const Heatmap = ({ width, height, data }: HeatmapProps) => {
         width={width}
         height={height - COLOR_LEGEND_HEIGHT}
       />
-      <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <ColorLegend
-          height={COLOR_LEGEND_HEIGHT}
-          width={200}
-          colorScale={colorScale}
-          interactionData={hoveredCell}
-        />
-      </div>
+      {showLegend && (
+        <div
+          style={{ width: "100%", display: "flex", justifyContent: "center" }}
+        >
+          <ColorLegend
+            height={COLOR_LEGEND_HEIGHT}
+            width={200}
+            colorScale={colorScale}
+            interactionData={hoveredCell}
+          />
+        </div>
+      )}
     </div>
   );
 };

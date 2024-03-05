@@ -13,7 +13,7 @@ export default function Tooltip({
   height,
 }: TooltipProps) {
   if (!interactionData) {
-    return null;
+    interactionData = { xPos: 0, yPos: 0, yLabel: 'Y test', xLabel: 'X test', value: 100}
   }
 
   return (
@@ -30,18 +30,19 @@ export default function Tooltip({
     >
       {/* The actual box with white background */}
       <div
-        className=".tooltip"
         style={{
           position: "absolute",
           left: interactionData.xPos,
           top: interactionData.yPos,
+          backgroundColor: 'red'
         }}
+        className=".tooltip"
       >
         <span>{interactionData.yLabel}</span>
         <br />
         <span>{interactionData.xLabel}</span>
         <span>: </span>
-        <b>{interactionData.value}</b>
+        <b>{interactionData.value || 0}</b>
       </div>
     </div>
   );

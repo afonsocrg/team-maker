@@ -8,9 +8,13 @@ import ParticipantList from "@components/ParticipantList";
 import TeamCard from "@components/TeamCard";
 import FileLoader from "@components/FileLoader";
 import { unparseCsvContent } from "@utils/csv";
-// import HeatMap from "@components/HeatMap";
+import HeatMap from "@components/HeatMap";
 
-function get_feature_distribution(participants: Person[], property: string) {
+function get_feature_distribution(
+  participants: Person[],
+  nTeams: number,
+  property: string
+) {
   const teams = new Set<number>();
   const values = new Set();
   const data = new Map<string, number>();
@@ -26,10 +30,10 @@ function get_feature_distribution(participants: Person[], property: string) {
   }
 
   const result = [];
-  for (const team of teams) {
+  for (let team = 0; team < nTeams; team++) {
     for (const value of values) {
       result.push({
-        x: team,
+        x: `Team ${team + 1}`,
         y: value,
         value: data.get(JSON.stringify([value, team])) || 0,
       });
@@ -50,16 +54,16 @@ export default function Home() {
     participants.filter((p) => p.team === teamId)
   );
 
-  // const features = new Set();
-  // participants.forEach((p) => {
-  //   for (const feature in p) {
-  //     features.add(feature);
-  //   }
-  // });
-  // console.log(features);
+  const features = new Set();
+  participants.forEach((p) => {
+    for (const feature in p) {
+      features.add(feature);
+    }
+  });
+  console.log(features);
 
-  // const group_dist = get_feature_distribution(participants, "group");
-  // console.log("GROUP DIST: ", group_dist);
+  const group_dist = get_feature_distribution(participants, nTeams, "group");
+  console.log("GROUP DIST: ", group_dist);
 
   const unassignedParticipants = participants.filter(
     (p) => p.team === null || p.team === undefined
@@ -167,7 +171,7 @@ export default function Home() {
           />
         </div>
       </div>
-      {/* <HeatMap data={group_dist} /> */}
+      <HeatMap data={group_dist} cellHeight={25} cellWidth={50}/>
     </div>
   );
 }
