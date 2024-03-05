@@ -1,18 +1,29 @@
-.app-container {
+.action-bar {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.team-manager {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  max-height: 800px;
 }
 
-.app-container .participant-list {
+.team-manager .participant-list {
   min-width: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
-.app-container .team-list {
+.team-manager .team-list {
   flex: 1;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .statistics-section {
   margin-top: 20px;
   margin-bottom: 20px;
+  overflow-x: scroll;
 }

@@ -1,3 +1,7 @@
+.participant-item {
+  width: 100%;
+}
+
 .participant-summary {
   display: flex;
   flex-direction: row;
@@ -13,8 +17,12 @@
   align-items: center;
 }
 
-/* .participant-summary .tags {
+.participant-summary .tags {
+  flex: 1;
   display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  /* display: flex;
   flex-direction: row;
-  gap: 5px;
-} */
+  gap: 5px; */
+}

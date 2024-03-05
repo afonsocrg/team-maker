@@ -6,6 +6,7 @@ import { ItemTypes } from "@types";
 import ParticipantDetails from "@components/ParticipantDetails";
 import Chip from "@components/Chip";
 import "./styles.css";
+import { useState } from "react";
 
 interface DropResult {
   allowedDropEffect: string;
@@ -19,6 +20,7 @@ type Props = {
   onMove: (participantId: number, team: number | undefined) => void;
 };
 export default function ParticipantItem({ data, onMove }: Props) {
+  const [showDetails, setShowDetails] = useState(false);
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: ItemTypes.PERSON,
@@ -57,7 +59,9 @@ export default function ParticipantItem({ data, onMove }: Props) {
   return (
     <div ref={drag} className="participant-item unselectable pointer">
       <Popover
-        open={!isDragging && undefined}
+        open={!isDragging && showDetails}
+        onOpenChange={(value) => setShowDetails(value)}
+        trigger="click"
         content={<ParticipantDetails participant={data} />}
       >
         <div className="participant-summary">
@@ -69,10 +73,7 @@ export default function ParticipantItem({ data, onMove }: Props) {
           <div className="name">{`${firstName} ${lastName}`}</div>
           <div className="tags">
             <Chip label={data.group} />
-            <Chip
-              label={data.strength}
-              bgColor='gray'
-            />
+            <Chip label={data.strength} bgColor="gray" />
           </div>
         </div>
       </Popover>

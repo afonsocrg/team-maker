@@ -10,8 +10,6 @@ import FileLoader from "@components/FileLoader";
 import { unparseCsvContent } from "@utils/csv";
 import Statistics from "@components/Statistics";
 
-const { Title } = Typography;
-
 function get_feature_distribution(
   participants: Person[],
   nTeams: number,
@@ -62,7 +60,7 @@ export default function Home() {
     "participants",
     []
   );
-  const [nTeams, setNTeams] = useState(4);
+  const [nTeams, setNTeams] = useLocalStorage<number>("teams", 4);
 
   const teams = Array.from(Array(nTeams).keys()).map((teamId) =>
     participants.filter((p) => p.team === teamId)
@@ -116,7 +114,7 @@ export default function Home() {
         }
       })
     );
-    setNTeams((prev) => prev - 1);
+    setNTeams(nTeams - 1);
   };
 
   const assignParticipant = (
@@ -135,6 +133,12 @@ export default function Home() {
 
   const loadParticipants = (newParticipants) => {
     setParticipants(newParticipants);
+    setNTeams(
+      Math.max.apply(
+        null,
+        newParticipants.map((p) => (p.team || 0) + 1)
+      )
+    );
   };
 
   const handleExportCsv = () => {
@@ -165,12 +169,14 @@ export default function Home() {
           <Statistics statistics={statistics} />
         </div>
       )}
-      <FileLoader onLoad={loadParticipants} />
-      <Button icon={<CoffeeOutlined />}>Generate teams</Button>
-      <Button icon={<DownloadOutlined />} onClick={handleExportCsv}>
-        Export Teams
-      </Button>
-      <div className="app-container">
+      <div className="action-bar">
+        <FileLoader onLoad={loadParticipants} />
+        <Button icon={<CoffeeOutlined />}>Generate teams</Button>
+        <Button icon={<DownloadOutlined />} onClick={handleExportCsv}>
+          Export Teams
+        </Button>
+      </div>
+      <div className="team-manager">
         <div className="participant-list">
           <ParticipantList
             participants={unassignedParticipants}

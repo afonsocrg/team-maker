@@ -55,9 +55,6 @@ export default function Renderer({
   const boundStartX = MARGIN.left + yLabelWidth
   const boundStartY = MARGIN.top + xLabelHeight
 
-  console.log("X:", width, boundsWidth, yLabelWidth);
-  console.log("Y:", height, boundsHeight, xLabelHeight);
-
   const xScale = useMemo(() => {
     return d3
       .scaleBand()
