@@ -62,7 +62,7 @@ export default function Home() {
   // console.log("GROUP DIST: ", group_dist);
 
   const unassignedParticipants = participants.filter(
-    (p) => !p.team
+    (p) => p.team === null || p.team === undefined
   );
 
   const createTeam = () => {
