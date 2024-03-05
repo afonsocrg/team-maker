@@ -1,6 +1,7 @@
 import { Person } from "@types";
 import { Avatar, Descriptions } from "antd";
 import "./styles.css";
+import { getAvatarSrc } from "@utils/avatars";
 
 type Props = {
   participant: Person;
@@ -27,9 +28,7 @@ export default function ParticipantDetails({ participant }: Props) {
   return (
     <div className="details-container">
       <div className="avatar">
-        <Avatar
-          src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${participant.id}`}
-        />
+        <Avatar src={getAvatarSrc(participant.sex, participant.id)} />
       </div>
       <div className="details">
         <Descriptions

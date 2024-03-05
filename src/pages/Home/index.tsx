@@ -1,5 +1,4 @@
 import "./styles.css";
-import { useState } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { Button, List, Typography } from "antd";
 import { CoffeeOutlined, DownloadOutlined } from "@ant-design/icons";

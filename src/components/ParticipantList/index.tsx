@@ -1,4 +1,4 @@
-import { List } from "antd";
+import { Button, List } from "antd";
 import type { Person } from "../../types";
 import ParticipantItem from "./ParticipantItem";
 
@@ -13,6 +13,7 @@ export default function ParticipantList({ participants, onMove }: Props) {
       className="demo-loadmore-list"
       itemLayout="horizontal"
       dataSource={participants}
+      rowKey={(p) => p.id}
       renderItem={(item: Person) => {
         return (
           <List.Item>

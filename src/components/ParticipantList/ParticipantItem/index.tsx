@@ -7,6 +7,7 @@ import ParticipantDetails from "@components/ParticipantDetails";
 import Chip from "@components/Chip";
 import "./styles.css";
 import { useState } from "react";
+import { getAvatarSrc } from "@utils/avatars";
 
 interface DropResult {
   allowedDropEffect: string;
@@ -66,9 +67,7 @@ export default function ParticipantItem({ data, onMove }: Props) {
       >
         <div className="participant-summary">
           <div className="avatar">
-            <Avatar
-              src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${data.id}`}
-            />
+            <Avatar src={getAvatarSrc(data.sex, data.id)} />
           </div>
           <div className="name">{`${firstName} ${lastName}`}</div>
           <div className="tags">
