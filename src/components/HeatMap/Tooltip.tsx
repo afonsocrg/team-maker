@@ -11,8 +11,6 @@ type TooltipProps = {
 
 export default function Tooltip({
   interactionData,
-  width,
-  height,
   tooltipMessage = null,
 }: TooltipProps) {
   if (!interactionData) {
@@ -26,8 +24,8 @@ export default function Tooltip({
     // Wrapper div: a rect on top of the viz area
     <div
       style={{
-        width,
-        height,
+        // width,
+        // height,
         position: "absolute",
         top: 0,
         left: 0,
