@@ -8,6 +8,7 @@ import Chip from "@components/Chip";
 import "./styles.css";
 import { useState } from "react";
 import { getAvatarSrc } from "@utils/avatars";
+import { getFirstLastName } from "@utils/names";
 
 interface DropResult {
   allowedDropEffect: string;
@@ -53,9 +54,7 @@ export default function ParticipantItem({ data, onMove }: Props) {
     }),
     [data]
   );
-  const split = data.name.split(" ");
-  const firstName = split[0];
-  const lastName = split[split.length - 1];
+  const [firstName, lastName] = getFirstLastName(data.name)
 
   return (
     <div ref={drag} className="participant-item unselectable pointer">

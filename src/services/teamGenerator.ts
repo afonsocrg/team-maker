@@ -1,4 +1,6 @@
 import { Person } from "@types";
+import { getFirstLastName } from "@utils/names";
+import { message } from "antd";
 
 function allIndicesOf<t>(array: t[], value: t): number[] {
   return array
@@ -57,7 +59,6 @@ function findWorstDistributedFeature(
       const diff = max - min;
       if (diff < 2) continue;
 
-      console.log(f, v, hist, min, max, diff);
       if (worstScore === null || diff > worstScore) {
         worstScore = diff;
         worstFeatureValuePairs = [{ feature: f, value: v, histogram: hist }];
@@ -78,27 +79,21 @@ function balance(
   participants: Person[],
   nTeams: number,
   feature: string,
-  value: any
+  value: any,
+  histogram
 ): Person[] {
-  const featureHistogram = getFeatureHistogram(
-    participants,
-    nTeams,
-    feature,
-    value
-  );
-  const min = Math.min.apply(null, featureHistogram);
-  const max = Math.max.apply(null, featureHistogram);
-  console.log(min, max);
+  const min = Math.min.apply(null, histogram);
+  const max = Math.max.apply(null, histogram);
 
   if (max - min <= 1) {
     console.log("Balance: Nothing to do");
-    return participants;
+    return null;
   }
 
   // Select a random team from the ones with the max value
   // Select a random team from the minimum value
-  const minTeams = allIndicesOf(featureHistogram, min);
-  const maxTeams = allIndicesOf(featureHistogram, max);
+  const minTeams = allIndicesOf(histogram, min);
+  const maxTeams = allIndicesOf(histogram, max);
 
   const toTeam = selectRandom(minTeams);
   const fromTeam = selectRandom(maxTeams);
@@ -125,6 +120,13 @@ function balance(
   selectedFromParticipant.team = toTeam;
   selectedToParticipant.team = fromTeam;
 
+  const [fromFirst, fromLast] = getFirstLastName(selectedFromParticipant.name);
+  const [toFirst, toLast] = getFirstLastName(selectedToParticipant.name);
+
+  message.success(
+    `Swapping ${fromFirst} ${fromLast} from team ${max} with ${toFirst} ${toLast} from team ${min}`
+  );
+
   return participants;
 }
 
@@ -135,10 +137,10 @@ export function generateTeams(
 ) {
   const result = findWorstDistributedFeature(participants, nTeams, features);
   if (result === null) return null;
-  const { feature, value } = result;
-  return balance(participants, nTeams, feature, value);
+  const { feature, value, histogram } = result;
+  return balance(participants, nTeams, feature, value, histogram);
 }
 
-function randomAssign(participants: Person[], nTeams: number): Person[] {
+export function randomAssign(participants: Person[], nTeams: number): Person[] {
   return participants.map(({ ...p }, idx) => ({ ...p, team: idx % nTeams }));
 }
