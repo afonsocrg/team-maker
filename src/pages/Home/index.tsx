@@ -1,6 +1,6 @@
 import "./styles.css";
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { Button, List, Typography } from "antd";
+import { Button, List } from "antd";
 import { CoffeeOutlined, DownloadOutlined } from "@ant-design/icons";
 import type { Person } from "@types";
 import ParticipantList from "@components/ParticipantList";
@@ -8,6 +8,7 @@ import TeamCard from "@components/TeamCard";
 import FileLoader from "@components/FileLoader";
 import { unparseCsvContent } from "@utils/csv";
 import Statistics from "@components/Statistics";
+import { generateTeams } from "@services/teamGenerator";
 
 function get_feature_distribution(
   participants: Person[],
@@ -160,6 +161,16 @@ export default function Home() {
     document.body.removeChild(link);
   };
 
+  const handleGenerateTeams = () => {
+    const response = generateTeams(participants, nTeams, [
+      "group",
+      "strength",
+      "sex",
+    ]);
+    if (response === null) return;
+    setParticipants(response);
+  };
+
   return (
     <div>
       {nTeams > 0 && (
@@ -170,7 +181,9 @@ export default function Home() {
       )}
       <div className="action-bar">
         <FileLoader onLoad={loadParticipants} />
-        <Button icon={<CoffeeOutlined />}>Generate teams</Button>
+        <Button icon={<CoffeeOutlined />} onClick={handleGenerateTeams}>
+          Generate teams
+        </Button>
         <Button icon={<DownloadOutlined />} onClick={handleExportCsv}>
           Export Teams
         </Button>
